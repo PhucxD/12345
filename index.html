@@ -1,0 +1,142 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>重慶旅遊行程規劃</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="password-section">
+        <h1>請輸入通關密碼</h1>
+        <input type="password" id="password-input" placeholder="輸入密碼">
+        <button onclick="verifyPassword()">提交</button>
+        <p id="error-message" style="color: red;"></p>
+    </div>
+
+    <div id="main-content" style="display: none;">
+        <h1>重慶旅遊行程規劃</h1>
+        <p>請選擇最多4個景點，然後點擊「生成行程」按鈕。</p>
+        <div id="attractions">
+            <div class="attraction">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/%E9%87%8D%E5%BA%86%E6%B4%AA%E5%B4%96%E6%B4%9E.jpg/500px-%E9%87%8D%E5%BA%86%E6%B4%AA%E5%B4%96%E6%B4%9E.jpg" alt="洪崖洞">
+                <label><input type="checkbox" value="洪崖洞"> 洪崖洞</label>
+            </div>
+            <div class="attraction">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Jiefangbei_2020-08-13.jpg/500px-Jiefangbei_2020-08-13.jpg" alt="解放碑">
+                <label><input type="checkbox" value="解放碑"> 解放碑</label>
+            </div>
+            <div class="attraction">
+                <img src="http://www.cqzyx.net/u/cms/zyx/201905/211654539y2i.jpg" alt="南山一棵樹">
+                <label><input type="checkbox" value="南山一棵樹"> 南山一棵樹</label>
+            </div>
+            <div class="attraction">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/%E9%87%8D%E5%BA%86_%E9%95%BF%E6%B1%9F%E4%B8%8A%E7%9A%84%E6%B8%A1%E6%B1%9F%E7%B4%A2%E9%81%931_-_panoramio.jpg/500px-%E9%87%8D%E5%BA%86_%E9%95%BF%E6%B1%9F%E4%B8%8A%E7%9A%84%E6%B8%A1%E6%B1%9F%E7%B4%A2%E9%81%931_-_panoramio.jpg" alt="長江索道">
+                <label><input type="checkbox" value="長江索道"> 長江索道</label>
+            </div>
+            <div class="attraction">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/%E9%87%8D%E5%BA%86%E7%A3%81%E5%99%A8%E5%8F%A3%E5%8F%A4%E9%95%87%E8%BF%9C%E7%9C%BA.jpg/500px-%E9%87%8D%E5%BA%86%E7%A3%81%E5%99%A8%E5%8F%A3%E5%8F%A4%E9%95%87%E8%BF%9C%E7%9C%BA.jpg" alt="磁器口古鎮">
+                <label><input type="checkbox" value="磁器口古鎮"> 磁器口古鎮</label>
+            </div>
+            <div class="attraction">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Chongqing_Zhongguo_Sanxia_Bowuguan_2014.04.21_11-11-06.jpg/500px-Chongqing_Zhongguo_Sanxia_Bowuguan_2014.04.21_11-11-06.jpg" alt="三峽博物館">
+                <label><input type="checkbox" value="三峽博物館"> 三峽博物館</label>
+            </div>
+            <div class="attraction">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/%E9%87%8D%E5%BA%86%E5%B8%82%E4%BA%BA%E6%B0%91%E5%A4%A7%E7%A4%BC%E5%A0%82%E6%AD%A3%E9%97%A8.jpg/500px-%E9%87%8D%E5%BA%86%E5%B8%82%E4%BA%BA%E6%B0%91%E5%A4%A7%E7%A4%BC%E5%A0%82%E6%AD%A3%E9%97%A8.jpg" alt="人民大禮堂">
+                <label><input type="checkbox" value="人民大禮堂"> 人民大禮堂</label>
+            </div>
+            <div class="attraction">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/%E6%9C%9D%E5%A4%A9%E9%97%A8%E8%BF%9C%E7%9C%BA%E5%A4%9C%E6%99%AF.jpg/500px-%E6%9C%9D%E5%A4%A9%E9%97%A8%E8%BF%9C%E7%9C%BA%E5%A4%9C%E6%99%AF.jpg" alt="朝天門">
+                <label><input type="checkbox" value="朝天門"> 朝天門</label>
+            </div>
+        </div>
+        <div class="button-container">
+            <button onclick="generateItinerary()">生成行程</button>
+        </div>
+        <div id="itinerary-result">
+            <button onclick="clearItinerary()" class="cancel-button hidden">取消</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
